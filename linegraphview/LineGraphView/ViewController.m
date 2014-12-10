@@ -18,7 +18,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
 
     // 配置graphView
     YYLineGraphView *lineGraph = [[YYLineGraphView alloc] initWithFrame:CGRectMake(0, 20, 320, 180)];
