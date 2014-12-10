@@ -38,6 +38,7 @@
 
 @property (nonatomic, strong) NSDictionary *themeAttributes;
 
+// 是否自定义y轴
 @property (nonatomic, assign) BOOL customYAixs;
 
 - (void)addPlot:(YYPlot *)plot;
