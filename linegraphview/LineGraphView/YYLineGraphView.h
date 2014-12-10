@@ -21,8 +21,10 @@
 // y轴上的label
 @property (nonatomic, strong) NSArray *yAxisLabels;
 
+// y轴label的颜色
 @property (nonatomic, strong) NSArray *yAxisLabelColors;
 
+// 点的颜色字典
 @property (nonatomic, strong) NSDictionary *plottingColors;
 
 // y坐标大小范围
