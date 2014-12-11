@@ -36,6 +36,7 @@
 // 折线图模型数组，多个plot就代表多个折线
 @property (nonatomic, readonly, strong) NSMutableArray *plots;
 
+// 主题字典
 @property (nonatomic, strong) NSDictionary *themeAttributes;
 
 // 是否自定义y轴
