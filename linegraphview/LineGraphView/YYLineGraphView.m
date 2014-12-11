@@ -12,6 +12,7 @@
 #import "YYXAixsLabel.h"
 //#import "PopoverView.h"
 
+
 @interface YYLineGraphView ()
 {
     float _leftMarginToLeave;
@@ -20,6 +21,7 @@
 }
 
 @property (nonatomic, strong) CAShapeLayer *firstCircleLayer;
+@property (nonatomic, strong) CAGradientLayer *gradientLayer;
 
 @end
 
@@ -110,7 +112,16 @@
         
         if ([_plots indexOfObject:plot] == 0) {
             // 绘制y轴
-            [self drawYLabels:plot];
+            
+            if (!self.customYAixs) {
+                [self drawYLabels_Default:plot];
+            } else {
+                [self drawYLabels_BloodPressure:plot];
+            }
+            
+//            [self drawYLabels:plot];
+            
+            
             // 绘制x轴
             [self drawXLabels:plot];
             // 绘制背景线
@@ -136,22 +147,22 @@
 //    }
 }
 
-#pragma mark - Actual Plot Drawing Methods
-
-- (void)drawPlotWithPlot:(YYPlot *)plot
-{
-    [self drawYLabels:plot];
-    
-    [self drawXLabels:plot];
-    
-    [self drawLines:plot];
-    
-    [self drawPlot:plot padding:YES];
-    
-    if (self.customYAixs) {
-        [self drawListPoints:plot];
-    }
-}
+//#pragma mark - Actual Plot Drawing Methods
+//
+//- (void)drawPlotWithPlot:(YYPlot *)plot
+//{
+//    [self drawYLabels:plot];
+//    
+//    [self drawXLabels:plot];
+//    
+//    [self drawLines:plot];
+//    
+//    [self drawPlot:plot padding:YES];
+//    
+//    if (self.customYAixs) {
+//        [self drawListPoints:plot];
+//    }
+//}
 
 
 - (int)getIndexForValue:(NSNumber *)value forPlot:(YYPlot *)plot
@@ -306,7 +317,7 @@
         _leftMarginToLeave = _labelMaxWidth + [_themeAttributes[kYAxisLabelSideMarginsKey] doubleValue];
         _plotWidth = (self.bounds.size.width - _leftMarginToLeave);
         
-    } else {
+    } else {                    // 自定义
         
         for (int i = INTERVAL_COUNT; i >= 0; i--) {
             
@@ -351,6 +362,113 @@
         _leftMarginToLeave = _labelMaxWidth + [_themeAttributes[kYAxisLabelSideMarginsKey] doubleValue]*2;
         _plotWidth = (self.bounds.size.width - _leftMarginToLeave);
     }
+}
+
+- (void)drawYLabels_Default:(YYPlot *)plot
+{
+    double yRange = [_yAxisRange doubleValue];
+    // 纵坐标y平均间隔值
+    double yIntervalValue = yRange / INTERVAL_COUNT;
+    // 纵坐标y平均间隔大小
+    double intervalInPx = (self.bounds.size.height-BOTTOM_MARGIN_TO_LEAVE) / (INTERVAL_COUNT+1);
+    
+    NSMutableArray *labelArray = [NSMutableArray array];
+    
+    for (int i = INTERVAL_COUNT+1; i >= 0; i--) {
+        
+        // y轴0开始往上画
+        CGPoint currentLinePoint = CGPointMake(_leftMarginToLeave, i * intervalInPx);
+        
+        CGRect labelFrame = CGRectMake(0, currentLinePoint.y-(intervalInPx/2), 100, intervalInPx);
+        
+        if (i != 0) {
+            
+            UILabel *yAxisLabel = [[UILabel alloc] initWithFrame:labelFrame];
+            
+            yAxisLabel.backgroundColor = [UIColor clearColor];
+            yAxisLabel.font = (UIFont *)_themeAttributes[kYAxisLabelFontKey];
+            yAxisLabel.textColor = (UIColor *)_themeAttributes[kYAxisLabelColorKey];
+            yAxisLabel.textAlignment = NSTextAlignmentCenter;
+            
+            float val = yIntervalValue * (INTERVAL_COUNT+1-i);
+            
+            if (val > 0) {
+                yAxisLabel.text = [NSString stringWithFormat:@"%.1f%@", val, _yAxisSuffix];
+            } else {
+                yAxisLabel.text = [NSString stringWithFormat:@"%.0f", val];
+            }
+            
+            [yAxisLabel sizeToFit];
+            
+            // y轴中间对齐线段
+            CGRect newLabelFrame = CGRectMake(0, currentLinePoint.y-(yAxisLabel.layer.frame.size.height/2), yAxisLabel.frame.size.width, yAxisLabel.layer.frame.size.height);
+            yAxisLabel.frame = newLabelFrame;
+            
+            // 最大宽度
+            if (newLabelFrame.size.width > _labelMaxWidth) {
+                _labelMaxWidth = newLabelFrame.size.width;
+            }
+            
+            [labelArray addObject:yAxisLabel];
+            [self addSubview:yAxisLabel];
+        }
+    }
+    
+    // _leftMarginToLeave等于宽度+margin
+    _leftMarginToLeave = _labelMaxWidth + [_themeAttributes[kYAxisLabelSideMarginsKey] doubleValue];
+    _plotWidth = (self.bounds.size.width - _leftMarginToLeave);
+}
+
+// 画y轴
+- (void)drawYLabels_BloodPressure:(YYPlot *)plot
+{
+    // 纵坐标y平均间隔大小
+    double intervalInPx = (self.bounds.size.height-BOTTOM_MARGIN_TO_LEAVE) / (INTERVAL_COUNT+1);
+    
+    NSMutableArray *labelArray = [NSMutableArray array];
+    
+    for (int i = INTERVAL_COUNT; i >= 0; i--) {
+        
+        // y轴0开始往上画
+        CGPoint currentLinePoint = CGPointMake(_leftMarginToLeave, i * intervalInPx);
+        
+        CGRect labelFrame = CGRectMake(0, currentLinePoint.y-(intervalInPx/2), 100, intervalInPx);
+        
+        if (i != 0) {
+            
+            UILabel *yAxisLabel = [[UILabel alloc] initWithFrame:labelFrame];
+            
+            yAxisLabel.backgroundColor = [UIColor clearColor];
+            yAxisLabel.font = (UIFont *)_themeAttributes[kYAxisLabelFontKey];
+            yAxisLabel.textColor = (UIColor *)_themeAttributes[kYAxisLabelColorKey];
+            yAxisLabel.textAlignment = NSTextAlignmentCenter;
+            
+            if (INTERVAL_COUNT-i > _yAxisLabels.count-1 || INTERVAL_COUNT-i < 0) {
+                yAxisLabel.text = @"";
+            } else {
+                yAxisLabel.text = _yAxisLabels[INTERVAL_COUNT-i];
+            }
+            
+            [yAxisLabel sizeToFit];
+            
+            // y轴中间对齐线段
+            
+            CGRect newLabelFrame = CGRectMake(0, currentLinePoint.y+(intervalInPx-yAxisLabel.layer.frame.size.height)/2, yAxisLabel.frame.size.width, yAxisLabel.layer.frame.size.height);
+            yAxisLabel.frame = newLabelFrame;
+            
+            // 最大宽度
+            if (newLabelFrame.size.width > _labelMaxWidth) {
+                _labelMaxWidth = newLabelFrame.size.width;
+            }
+            
+            [labelArray addObject:yAxisLabel];
+            [self addSubview:yAxisLabel];
+        }
+    }
+    
+    // _leftMarginToLeave等于宽度+margin
+    _leftMarginToLeave = _labelMaxWidth + [_themeAttributes[kYAxisLabelSideMarginsKey] doubleValue]*2;
+    _plotWidth = (self.bounds.size.width - _leftMarginToLeave);
 }
 
 
@@ -584,7 +702,6 @@
     
     // 额外的线段
 //    CGPathAddLineToPoint(graphPath, NULL, _leftMarginToLeave + _plotWidth, plot.points[count-1].y);
-    
 
     // 右边顶部
 //    CGPathAddLineToPoint(backgroundPath, NULL, _leftMarginToLeave + _plotWidth, plot.points[count-1].y);
@@ -599,27 +716,33 @@
     backgroundLayer.path = backgroundPath;
     graphLayer.path = graphPath;
     
-//    // animation
-//    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-//    animation.duration = 1;
-//    animation.fromValue = @(0.0);
-//    animation.toValue = @(1.0);
-//    [graphLayer addAnimation:animation forKey:@"strokeEnd"];
+    // animation
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+    animation.delegate = self;
+    animation.duration = 0.5;
+    animation.fromValue = @(0.0);
+    animation.toValue = @(1.0);
+    [graphLayer addAnimation:animation forKey:@"strokeEnd"];
+    
     
     if (pad) {                  // 填充折线图背景
+        
         [self.layer addSublayer:backgroundLayer];
         
         // 渐变
         CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+        self.gradientLayer = gradientLayer;
+        
         gradientLayer.frame = backgroundLayer.bounds;
         //    gradientLayer.colors = @[[UIColor colorWithRed:0.251 green:0.232 blue:1.000 alpha:1.000],[UIColor colorWithRed:0.282 green:0.945 blue:1.000 alpha:1.000]];
-        gradientLayer.colors = @[(id)[[UIColor greenColor] CGColor], (id)[[UIColor whiteColor] CGColor]];
+        gradientLayer.colors = @[(id)[[UIColor orangeColor] CGColor], (id)[[UIColor whiteColor] CGColor]];
         // 起始点
         gradientLayer.startPoint = CGPointMake(0, 0);
         // 结束点
         gradientLayer.endPoint   = CGPointMake(0, 1);
         gradientLayer.mask = backgroundLayer;
-        [self.layer addSublayer:gradientLayer];
+//        [self.layer addSublayer:gradientLayer];
+
     }
    
     [self.layer addSublayer:graphLayer];
@@ -645,7 +768,7 @@
             
             if ([_plottingColors objectForKey:@(y+1)] != nil) {
                 circleLayer.strokeColor = ((UIColor *)[_plottingColors objectForKey:@(y+1)]).CGColor;
-            } else {
+            } else {        // 超过限度，颜色等于最后一个颜色
                 NSUInteger count = _plottingColors.count;
                 circleLayer.strokeColor = ((UIColor *)[_plottingColors objectForKey:@(count)]).CGColor;
             }
@@ -722,5 +845,16 @@
     
 }
 
+- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
+{
+    CABasicAnimation *fadeIn = [CABasicAnimation animationWithKeyPath:@"opacity"];
+    fadeIn.fromValue = [NSNumber numberWithFloat:0.0];
+    fadeIn.toValue = [NSNumber numberWithFloat:1.0];
+    fadeIn.duration = 0.5;
+    
+    [self.gradientLayer addAnimation:fadeIn forKey:@"flashAnimation"];
+    // 插入到点下面
+    [self.layer insertSublayer:self.gradientLayer below:self.firstCircleLayer];
+}
 
 @end

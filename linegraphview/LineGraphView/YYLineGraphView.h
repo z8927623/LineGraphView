@@ -8,6 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    
+    GraphViewTypeBloodPressure,
+    GraphViewTypeBloodSugar,
+    GraphViewTypeWeight
+    
+} GraphViewType;
+
+
 @class YYPlot;
 
 @interface YYLineGraphView : UIView
@@ -41,6 +50,9 @@
 
 // 是否自定义y轴
 @property (nonatomic, assign) BOOL customYAixs;
+
+// 图标类型
+@property (nonatomic, assign) GraphViewType graphViewType;
 
 - (void)addPlot:(YYPlot *)plot;
 

@@ -10,6 +10,7 @@
 
 @interface ViewController : UIViewController
 
+- (IBAction)animate:(id)sender;
 
 @end
 

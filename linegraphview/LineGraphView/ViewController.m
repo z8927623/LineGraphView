@@ -12,6 +12,8 @@
 
 @interface ViewController ()
 
+@property (nonatomic, strong) YYLineGraphView *lineGraphView;
+
 @end
 
 @implementation ViewController
@@ -19,10 +21,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    [self  setupLineGraphView];
+}
+
+- (void)setupLineGraphView
+{
     // 配置graphView
-    YYLineGraphView *lineGraph = [[YYLineGraphView alloc] initWithFrame:CGRectMake(0, 20, 320, 180)];
+    YYLineGraphView *lineGraphView = [[YYLineGraphView alloc] initWithFrame:CGRectMake(0, 20, 320, 180)];
+    self.lineGraphView = lineGraphView;
     
-    lineGraph.customYAixs = YES;
+    lineGraphView.customYAixs = YES;
     
     NSDictionary *themeAttributes = @{
                                       kXAxisDateLabelColorKey :[UIColor colorWithRed:113.0/255.0 green:173.0/255.0 blue:112.0/255.0 alpha:1.0],   // x轴date label的颜色
@@ -38,31 +46,31 @@
                                       kSmallCircleSizeKey : @3.0
                                       };
     
-    lineGraph.themeAttributes = themeAttributes;
+    lineGraphView.themeAttributes = themeAttributes;
     
     
-    lineGraph.yAxisRange = @(YAXIS_RANGE);
-    lineGraph.yAxisSuffix =  @"K";
+    lineGraphView.yAxisRange = @(YAXIS_RANGE);
+    lineGraphView.yAxisSuffix =  @"K";
     
-    lineGraph.xAxisValues = @[
-                               @{ @1 : @"周五" },
-                               @{ @2 : @"周六" },
-                               @{ @3 : @"周日" },
-                               @{ @4 : @"周一" },
-                               @{ @5 : @"周二" },
-                               @{ @6 : @"周三" },
-                               @{ @7 : @"周四" },
-                               ];
-    lineGraph.yAxisLabels = @[@"偏低", @"理想", @"正常", @"轻度", @"中度", @"重度"];
-    lineGraph.yAxisLabelColors = @[[UIColor blackColor], [UIColor blueColor], [UIColor cyanColor], [UIColor grayColor], [UIColor orangeColor], [UIColor redColor]];
-    lineGraph.plottingColors = @{
-                                 @1 : [UIColor blackColor],
-                                 @2 : [UIColor blueColor],
-                                 @3 : [UIColor cyanColor],
-                                 @4 : [UIColor grayColor],
-                                 @5 : [UIColor orangeColor],
-                                 @6 : [UIColor redColor]
-                                 };
+    lineGraphView.xAxisValues = @[
+                                  @{ @1 : @"周五" },
+                                  @{ @2 : @"周六" },
+                                  @{ @3 : @"周日" },
+                                  @{ @4 : @"周一" },
+                                  @{ @5 : @"周二" },
+                                  @{ @6 : @"周三" },
+                                  @{ @7 : @"周四" },
+                                  ];
+    lineGraphView.yAxisLabels = @[@"偏低", @"理想", @"正常", @"轻度", @"中度", @"重度"];
+    lineGraphView.yAxisLabelColors = @[[UIColor blackColor], [UIColor blueColor], [UIColor cyanColor], [UIColor grayColor], [UIColor orangeColor], [UIColor redColor]];
+    lineGraphView.plottingColors = @{
+                                     @1 : [UIColor blackColor],
+                                     @2 : [UIColor blueColor],
+                                     @3 : [UIColor cyanColor],
+                                     @4 : [UIColor grayColor],
+                                     @5 : [UIColor orangeColor],
+                                     @6 : [UIColor redColor]
+                                     };
     
     
     // 配置折线1
@@ -71,14 +79,14 @@
     plot1.showCircle = YES;
     
     plot1.plottingValues = @[
-                              @{ @1 : @13 },
-                              @{ @2 : @20 },
-                              @{ @3 : @90 },
-                              @{ @4 : @33 },
-                              @{ @5 : @79 },
-                              @{ @6 : @67 },
-                              @{ @7 : @47 }
-                              ];
+                             @{ @1 : @13 },
+                             @{ @2 : @20 },
+                             @{ @3 : @90 },
+                             @{ @4 : @33 },
+                             @{ @5 : @79 },
+                             @{ @6 : @67 },
+                             @{ @7 : @47 }
+                             ];
     NSArray *arr1 = @[@"1", @"2", @"3", @"4", @"5", @"6" , @"7"];
     // 选中点popView的label
     plot1.plottingPointsLabels = arr1;
@@ -92,11 +100,11 @@
                                            };
     
     plot1.plotThemeAttributes = plotThemeAttributes1;
-
+    
     
     // 配置折线2
     YYPlot *plot2 = [[YYPlot alloc] init];
-  
+    
     plot2.showCircle = NO;
     
     plot2.plottingValues = @[
@@ -113,12 +121,12 @@
     plot2.plottingPointsLabels = arr2;
     
     NSDictionary *plotThemeAttributes2 = @{
-                                          kPlotFillColorKey : [UIColor colorWithRed:181.0/255.0 green:227.0/255.0 blue:197.0/255.0 alpha:0.5],  // 填充颜色
-                                          kPlotStrokeWidthKey : @1,   // 线的宽度
-                                          kPlotStrokeColorKey : [UIColor colorWithRed:175.0/255.0 green:174.0/255.0 blue:175.0/255.0 alpha:1], // 线的颜色
-                                          kPlotPointFillColorKey : [UIColor whiteColor],  // 点的颜色
-                                          kPlotPointValueFontKey : [UIFont fontWithName:@"TrebuchetMS" size:18]
-                                          };
+                                           kPlotFillColorKey : [UIColor colorWithRed:181.0/255.0 green:227.0/255.0 blue:197.0/255.0 alpha:0.5],  // 填充颜色
+                                           kPlotStrokeWidthKey : @1,   // 线的宽度
+                                           kPlotStrokeColorKey : [UIColor colorWithRed:175.0/255.0 green:174.0/255.0 blue:175.0/255.0 alpha:1], // 线的颜色
+                                           kPlotPointFillColorKey : [UIColor whiteColor],  // 点的颜色
+                                           kPlotPointValueFontKey : [UIFont fontWithName:@"TrebuchetMS" size:18]
+                                           };
     
     plot2.plotThemeAttributes = plotThemeAttributes2;
     
@@ -151,19 +159,20 @@
     
     
     
-    [lineGraph addPlot:plot1];
-//    [lineGraph addPlot:plot2];
-//    [lineGraph addPlot:plot3];
+    [lineGraphView addPlot:plot1];
+    //    [lineGraph addPlot:plot2];
+    //    [lineGraph addPlot:plot3];
     
     // 建立折线图
-    [lineGraph setupTheView];
+    [lineGraphView setupTheView];
     
-    [self.view addSubview:lineGraph];
+    [self.view addSubview:lineGraphView];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (IBAction)animate:(id)sender {
+    
+    [self.lineGraphView removeFromSuperview];
+    
+    [self setupLineGraphView];
 }
-
 @end
