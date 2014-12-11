@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "YYLineGraphViewConstants.h"
 
+// 点信息类
+
 @interface YYPlot : NSObject
 
 // 该折线图坐标点数据
