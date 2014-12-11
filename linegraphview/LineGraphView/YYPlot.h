@@ -17,10 +17,13 @@
 // 坐标点被点击时候popView上显示内容
 @property (nonatomic, strong) NSArray *plottingPointsLabels;
 
+// 指向CGPoint的指针
 @property (nonatomic) CGPoint *points;
 
+// 圆点的主题
 @property (nonatomic) NSDictionary *plotThemeAttributes;
 
+// 是否显示圆点
 @property (nonatomic, assign) BOOL showCircle;
 
 @end
