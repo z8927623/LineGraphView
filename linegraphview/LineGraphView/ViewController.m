@@ -21,8 +21,7 @@
 
     // 配置graphView
     YYLineGraphView *lineGraph = [[YYLineGraphView alloc] initWithFrame:CGRectMake(0, 20, 320, 180)];
-    
-    lineGraph.customYAixs = YES;
+    lineGraph.customYAixs = YES;     
     
     NSDictionary *themeAttributes = @{
                                       kXAxisDateLabelColorKey :[UIColor colorWithRed:113.0/255.0 green:173.0/255.0 blue:112.0/255.0 alpha:1.0],   // x轴date label的颜色
