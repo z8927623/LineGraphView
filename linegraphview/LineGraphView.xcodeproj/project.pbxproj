@@ -18,7 +18,6 @@
 		B8C422CF1A2EBEA200AD5D01 /* YYLineGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C422CE1A2EBEA200AD5D01 /* YYLineGraphView.m */; };
 		B8C422D51A2EC33500AD5D01 /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C422D41A2EC33500AD5D01 /* PopoverView.m */; };
 		B8C4C6F51A314484000541B6 /* YYXAixsLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C4C6F41A314484000541B6 /* YYXAixsLabel.m */; };
-		B8D271EF1A39961B008C7232 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8D271EE1A39961B008C7232 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,7 +56,6 @@
 		B8C422D61A2EC35600AD5D01 /* PopoverViewCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverViewCompatibility.h; sourceTree = "<group>"; };
 		B8C4C6F31A314484000541B6 /* YYXAixsLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYXAixsLabel.h; sourceTree = "<group>"; };
 		B8C4C6F41A314484000541B6 /* YYXAixsLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYXAixsLabel.m; sourceTree = "<group>"; };
-		B8D271EE1A39961B008C7232 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,7 +63,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B8D271EF1A39961B008C7232 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,7 +79,6 @@
 		B8C422981A2EBE7A00AD5D01 = {
 			isa = PBXGroup;
 			children = (
-				B8D271EE1A39961B008C7232 /* QuartzCore.framework */,
 				B8C422A31A2EBE7A00AD5D01 /* LineGraphView */,
 				B8C422BD1A2EBE7A00AD5D01 /* LineGraphViewTests */,
 				B8C422A21A2EBE7A00AD5D01 /* Products */,
