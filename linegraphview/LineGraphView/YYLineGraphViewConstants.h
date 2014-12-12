@@ -21,11 +21,13 @@
 // popView的字体
 #define kPlotPointValueFontKey @"kPlotPointValueFontKey"
 
+#define kXAxisLabelColorKey     @"kXAxisLabelColorKey"
+#define kXAxisLabelFontKey     @"kXAxisLabelFontKey"
+
 // x轴Date label的颜色
 #define kXAxisDateLabelColorKey @"kXAxisDateLabelColorKey"
 // x轴Date label的字体
 #define kXAxisDateLabelFontKey @"kXAxisDateLabelFontKey"
-
 // x轴Week label的颜色
 #define kXAxisWeekLabelColorKey @"kXAxisWeekLabelColorKey"
 // x轴Week label的字体

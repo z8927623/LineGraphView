@@ -31,8 +31,12 @@
     self.lineGraphView = lineGraphView;
     
     lineGraphView.customYAixs = YES;
+    lineGraphView.timeDimensionType = TimeDimensionTypeThreeMonth;
+    
     
     NSDictionary *themeAttributes = @{
+                                      kXAxisLabelColorKey : [UIColor colorWithRed:113.0/255.0 green:173.0/255.0 blue:112.0/255.0 alpha:1.0],
+                                      kXAxisLabelFontKey : [UIFont fontWithName:@"TrebuchetMS" size:12],
                                       kXAxisDateLabelColorKey :[UIColor colorWithRed:113.0/255.0 green:173.0/255.0 blue:112.0/255.0 alpha:1.0],   // x轴date label的颜色
                                       kXAxisDateLabelFontKey : [UIFont fontWithName:@"TrebuchetMS" size:10],   // x轴date label的字体
                                       kXAxisWeekLabelColorKey :[UIColor colorWithRed:113.0/255.0 green:173.0/255.0 blue:112.0/255.0 alpha:1.0],   // x轴week label的颜色
@@ -52,15 +56,32 @@
     lineGraphView.yAxisRange = @(YAXIS_RANGE);
     lineGraphView.yAxisSuffix =  @"K";
     
+//    lineGraphView.xAxisValues = @[
+//                                  @{ @1 : @"12-12" },
+//                                  @{ @2 : @"12-13" },
+//                                  @{ @3 : @"12-14" },
+//                                  @{ @4 : @"12-15" },
+//                                  @{ @5 : @"12-16" },
+//                                  @{ @6 : @"12-17" },
+//                                  @{ @7 : @"12-18" },
+//                                  @{ @7 : @"12-20" },
+//                                  @{ @7 : @"12-21" },
+//                                  @{ @7 : @"12-22" },
+//                                  @{ @7 : @"12-23" },
+//                                  @{ @7 : @"12-24" },
+//                                  ];
+    
     lineGraphView.xAxisValues = @[
-                                  @{ @1 : @"周五" },
-                                  @{ @2 : @"周六" },
-                                  @{ @3 : @"周日" },
-                                  @{ @4 : @"周一" },
-                                  @{ @5 : @"周二" },
-                                  @{ @6 : @"周三" },
-                                  @{ @7 : @"周四" },
+                                  @{ @1 : @"12-12" },
+                                  @{ @2 : @"12-27" },
+                                  @{ @3 : @"01-12" },
+                                  @{ @4 : @"01-27" },
+                                  @{ @5 : @"02-12" },
+                                  @{ @6 : @"02-27" },
+                                  @{ @7 : @"03-12" }
                                   ];
+
+    
     lineGraphView.yAxisLabels = @[@"偏低", @"理想", @"正常", @"轻度", @"中度", @"重度"];
     lineGraphView.yAxisLabelColors = @[[UIColor blackColor], [UIColor blueColor], [UIColor cyanColor], [UIColor grayColor], [UIColor orangeColor], [UIColor redColor]];
     lineGraphView.plottingColors = @{
@@ -85,8 +106,31 @@
                              @{ @4 : @33 },
                              @{ @5 : @79 },
                              @{ @6 : @67 },
-                             @{ @7 : @47 }
+                             @{ @7 : @47 },
                              ];
+
+
+//    plot1.plottingValues = @[
+//                             @{ @1.5 : @13 },
+//                             @{ @2.5 : @20 },
+//                             @{ @3.5 : @90 },
+//                             @{ @4.0 : @33 },
+//                             @{ @5.5 : @79 },
+//                             @{ @6.5 : @67 },
+//                             @{ @7.0 : @47 }
+//                             ];
+    
+//    plot1.plottingValues = @[
+//                             @{ @1.0 : @13 },
+//                             @{ @1.6 : @20 },
+//                             @{ @1.9 : @90 },
+//                             @{ @2.7 : @33 },
+//                             @{ @2.9 : @79 },
+//                             @{ @3.3 : @67 },
+//                             @{ @7.0 : @47 }
+//                             ];
+    
+    
     NSArray *arr1 = @[@"1", @"2", @"3", @"4", @"5", @"6" , @"7"];
     // 选中点popView的label
     plot1.plottingPointsLabels = arr1;

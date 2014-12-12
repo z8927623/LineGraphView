@@ -9,12 +9,16 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
-    
     GraphViewTypeBloodPressure,
     GraphViewTypeBloodSugar,
     GraphViewTypeWeight
-    
 } GraphViewType;
+
+typedef enum {
+    TimeDimensionTypeOneWeek,
+    TimeDimensionTypeOneMonth,
+    TimeDimensionTypeThreeMonth
+} TimeDimensionType;
 
 
 @class YYPlot;
@@ -51,8 +55,11 @@ typedef enum {
 // 是否自定义y轴
 @property (nonatomic, assign) BOOL customYAixs;
 
-// 图标类型
+// 图表类型
 @property (nonatomic, assign) GraphViewType graphViewType;
+
+// 时间度量类型
+@property (nonatomic, assign) TimeDimensionType timeDimensionType;
 
 - (void)addPlot:(YYPlot *)plot;
 

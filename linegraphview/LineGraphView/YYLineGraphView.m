@@ -70,7 +70,7 @@
     _themeAttributes = themeAttributes;
     
     _leftMarginToLeave = [_themeAttributes[kYAxisLabelSideMarginsKey] doubleValue];
-    _plotWidth = (self.bounds.size.width - _leftMarginToLeave);
+    _plotWidth = self.bounds.size.width - _leftMarginToLeave;
 }
 
 
@@ -111,27 +111,26 @@
     for (YYPlot *plot in _plots) {
         
         if ([_plots indexOfObject:plot] == 0) {
-            // 绘制y轴
             
+            // 1、绘制y轴
             if (!self.customYAixs) {
                 [self drawYLabels_Default:plot];
             } else {
                 [self drawYLabels_BloodPressure:plot];
-            }
-            
-//            [self drawYLabels:plot];
-            
-            
-            // 绘制x轴
-            [self drawXLabels:plot];
-            // 绘制背景线
-            [self drawLines:plot];
-            // 绘制y轴小圆点
-            if (self.customYAixs) {
+                // 绘制y轴小圆点
                 [self drawListPoints:plot];
             }
             
-            [self drawPlot:plot padding:YES];
+            // 2、绘制x轴
+//            [self drawXLabels:plot];
+            [self drawXLabels2:plot];
+            [self drawPoints:plot];
+            
+            // 3、绘制背景线
+            [self drawLines:plot];
+            // 4、画点
+//            [self drawPlot:plot padding:YES];
+            [self drawPlot2:plot padding:YES];
             
         } else {
             
@@ -475,21 +474,22 @@
 // 画x轴
 - (void)drawXLabels:(YYPlot *)plot
 {
+    // x label的数目
     NSUInteger xIntervalCount = _xAxisValues.count;
 
     // 横坐标x平均间隔值
     double xIntervalInPx = _plotWidth / _xAxisValues.count;
-    
+    // 分配xIntervalCount个CGPoint的内存空间
     plot.points = calloc(sizeof(CGPoint), xIntervalCount);
-    
+
     for (int i = 0; i < xIntervalCount; i++) {
         
         CGPoint currentLabelPoint = CGPointMake(xIntervalInPx*i+_leftMarginToLeave, self.bounds.size.height-BOTTOM_MARGIN_TO_LEAVE);
         CGRect xLabelFrame = CGRectMake(currentLabelPoint.x, currentLabelPoint.y, xIntervalInPx, BOTTOM_MARGIN_TO_LEAVE);
-        
+
         // point在label中间
         plot.points[i] = CGPointMake((int)xLabelFrame.origin.x + xLabelFrame.size.width/2, (int)0);
-
+ 
         NSDictionary *dic = [_xAxisValues objectAtIndex:i];
         
         __block NSString *xLabel = nil;
@@ -500,9 +500,91 @@
         
         NSString *date = [NSString stringWithFormat:@"%@", xLabel];
         
-        YYXAixsLabel *xAxisLabel = [[YYXAixsLabel alloc] initWithFrame:xLabelFrame dateLbl:date weekLbl:@"呵呵" andThemeAttributes:_themeAttributes];
+//        YYXAixsLabel *xAxisLabel = [[YYXAixsLabel alloc] initWithFrame:xLabelFrame dateLbl:date weekLbl:@"呵呵" andThemeAttributes:_themeAttributes];
+//        [self addSubview:xAxisLabel];
+        
+        UILabel *xAxisLabel = [[UILabel alloc] initWithFrame:xLabelFrame];
+        xAxisLabel.backgroundColor = [UIColor clearColor];
+        xAxisLabel.font = (UIFont *)_themeAttributes[kXAxisLabelFontKey];
+        xAxisLabel.textColor = (UIColor *)_themeAttributes[kXAxisLabelColorKey];
+        xAxisLabel.textAlignment = NSTextAlignmentCenter;
+        xAxisLabel.text = [NSString stringWithFormat:@"%@", date];
         [self addSubview:xAxisLabel];
     }
+}
+
+// 画x轴
+- (void)drawXLabels2:(YYPlot *)plot
+{
+    // x label的数目
+    NSUInteger xIntervalCount = _xAxisValues.count;
+    
+    // 横坐标x平均间隔值
+    double xIntervalInPx = _plotWidth / _xAxisValues.count;
+    // 分配xIntervalCount个CGPoint的内存空间
+    plot.points = calloc(sizeof(CGPoint), xIntervalCount);
+    
+    for (int i = 0; i < xIntervalCount; i++) {
+        
+        CGPoint currentLabelPoint = CGPointMake(xIntervalInPx*i+_leftMarginToLeave, self.bounds.size.height-BOTTOM_MARGIN_TO_LEAVE);
+        CGRect xLabelFrame = CGRectMake(currentLabelPoint.x, currentLabelPoint.y, xIntervalInPx, BOTTOM_MARGIN_TO_LEAVE);
+        
+        NSDictionary *dic = [_xAxisValues objectAtIndex:i];
+        
+        __block NSString *xLabel = nil;
+        // 枚举字典
+        [dic enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            xLabel = (NSString *)obj;
+        }];
+        
+        NSString *date = [NSString stringWithFormat:@"%@", xLabel];
+        
+        //        YYXAixsLabel *xAxisLabel = [[YYXAixsLabel alloc] initWithFrame:xLabelFrame dateLbl:date weekLbl:@"呵呵" andThemeAttributes:_themeAttributes];
+        //        [self addSubview:xAxisLabel];
+        
+        UILabel *xAxisLabel = [[UILabel alloc] initWithFrame:xLabelFrame];
+        xAxisLabel.backgroundColor = [UIColor clearColor];
+        xAxisLabel.font = (UIFont *)_themeAttributes[kXAxisLabelFontKey];
+        xAxisLabel.textColor = (UIColor *)_themeAttributes[kXAxisLabelColorKey];
+        xAxisLabel.textAlignment = NSTextAlignmentCenter;
+        xAxisLabel.text = [NSString stringWithFormat:@"%@", date];
+        [self addSubview:xAxisLabel];
+    }
+}
+
+- (void)drawPoints:(YYPlot *)plot
+{
+    // 点的数目
+    NSUInteger xPointCount = plot.plottingValues.count;
+    
+    // 横坐标x平均间隔值
+    double xIntervalInPx = _plotWidth / _xAxisValues.count;
+    
+    // 分配xIntervalCount个CGPoint的内存空间
+    plot.points = calloc(sizeof(CGPoint), xPointCount);
+    
+    [plot.plottingValues enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    
+        NSDictionary *dic = (NSDictionary *)obj;
+        
+        __block NSNumber *_key = nil;
+        __block NSNumber *_value = nil;
+        
+        // 获取key和value
+        [dic enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            _key = (NSNumber *)key;
+            _value = (NSNumber *)obj;
+
+            if (self.timeDimensionType == TimeDimensionTypeOneWeek) {
+                plot.points[idx] = CGPointMake(_plotWidth/7*[_key doubleValue] - _plotWidth/7 + _leftMarginToLeave + xIntervalInPx/2, 0);
+            } else if (self.timeDimensionType == TimeDimensionTypeOneMonth) {
+                plot.points[idx] = CGPointMake(_plotWidth/30*[_key doubleValue] - _plotWidth/30 + _leftMarginToLeave + xIntervalInPx/2, 0);
+            } else {
+                plot.points[idx] = CGPointMake(_plotWidth/90*[_key doubleValue] - _plotWidth/90 + _leftMarginToLeave + xIntervalInPx/2, 0);
+            }
+        }];
+    }];
+
 }
 
 
@@ -626,7 +708,6 @@
     
     // 背景
     CAShapeLayer *backgroundLayer = [CAShapeLayer layer];
-    
     backgroundLayer.frame = self.bounds;
     backgroundLayer.fillColor = ((UIColor *)theme[kPlotFillColorKey]).CGColor;
     backgroundLayer.backgroundColor = [UIColor clearColor].CGColor;
@@ -663,6 +744,7 @@
             _value = (NSNumber *)obj;
         }];
         
+        // plottingValues在_xAxisValues上的对应
         // 获得该key的index
         int xIndex = [self getIndexForValue:_key forPlot:plot];
         
@@ -670,22 +752,27 @@
         double height = self.bounds.size.height - BOTTOM_MARGIN_TO_LEAVE;
         
         double y = height - ((height / ([_yAxisRange doubleValue] + yIntervalValue)) * [_value doubleValue]);
-        
-        plot.points[xIndex].x = ceil(plot.points[xIndex].x);
-        plot.points[xIndex].y = ceil(y);
-        
+
+        if (xIndex != -1) {
+            plot.points[xIndex].x = ceil(plot.points[xIndex].x);
+            plot.points[xIndex].y = ceil(y);
+        }
     }];
     
-//    // 移到初始点
-//    CGPathMoveToPoint(graphPath, NULL, _leftMarginToLeave, plot.points[0].y);
-//    CGPathMoveToPoint(backgroundPath, NULL, _leftMarginToLeave, plot.points[0].y);
     
     NSUInteger count = _xAxisValues.count;
 
     CGPoint firstPoint = plot.points[0];
     CGPoint lastPoint = plot.points[count-1];
     
+    NSUInteger plottingValuesCount = plot.plottingValues.count;
+    
     for (int i = 0; i < count; i++) {
+        
+        if (i > plottingValuesCount-1) {
+            lastPoint = plot.points[i-1];
+            break;
+        }
         
         CGPoint point = plot.points[i];
         
@@ -699,12 +786,6 @@
         // 画背景
         CGPathAddLineToPoint(backgroundPath, NULL, point.x, point.y);
     }
-    
-    // 额外的线段
-//    CGPathAddLineToPoint(graphPath, NULL, _leftMarginToLeave + _plotWidth, plot.points[count-1].y);
-
-    // 右边顶部
-//    CGPathAddLineToPoint(backgroundPath, NULL, _leftMarginToLeave + _plotWidth, plot.points[count-1].y);
     
     // 右边底部
     CGPathAddLineToPoint(backgroundPath, NULL, lastPoint.x, self.bounds.size.height-BOTTOM_MARGIN_TO_LEAVE-1);
@@ -747,9 +828,16 @@
    
     [self.layer addSublayer:graphLayer];
     
+    
     if (plot.showCircle) {
         
+        NSUInteger plottingValuesCount = plot.plottingValues.count;
+        
         for (int i = 0; i < count; i++) {
+            
+            if (i > plottingValuesCount-1) {
+                break;
+            }
             
             CGPoint point = plot.points[i];
             double yValue = [[plot.plottingValues[i] objectForKey:@(i+1)] doubleValue];
@@ -808,6 +896,211 @@
         
         [self addSubview:btn];
     }
+     
+}
+
+
+- (void)drawPlot2:(YYPlot *)plot padding:(BOOL)pad
+{
+    //      高  -------> 低
+    // 层次：背景 > 折线 > 圆形
+    
+    NSDictionary *theme = plot.plotThemeAttributes;
+    
+    // 背景
+    CAShapeLayer *backgroundLayer = [CAShapeLayer layer];
+    backgroundLayer.frame = self.bounds;
+    backgroundLayer.fillColor = ((UIColor *)theme[kPlotFillColorKey]).CGColor;
+    backgroundLayer.backgroundColor = [UIColor clearColor].CGColor;
+    backgroundLayer.strokeColor = [UIColor clearColor].CGColor;
+    backgroundLayer.lineWidth = ((NSNumber *)theme[kPlotStrokeWidthKey]).intValue;
+    
+    CGMutablePathRef backgroundPath = CGPathCreateMutable();
+    
+    // 线段
+    CAShapeLayer *graphLayer = [CAShapeLayer layer];
+    graphLayer.frame = self.bounds;
+    graphLayer.fillColor = [UIColor clearColor].CGColor;
+    graphLayer.backgroundColor = [UIColor clearColor].CGColor;
+    graphLayer.strokeColor = ((UIColor *)theme[kPlotStrokeColorKey]).CGColor;
+    graphLayer.lineWidth = ((NSNumber *)theme[kPlotStrokeWidthKey]).intValue;
+    
+    CGMutablePathRef graphPath = CGPathCreateMutable();
+    
+    double yRange = [_yAxisRange doubleValue];
+    
+    // 纵坐标y平均间隔值
+    double yIntervalValue = yRange / INTERVAL_COUNT;
+    
+    [plot.plottingValues enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        
+        NSDictionary *dic = (NSDictionary *)obj;
+        
+        __block NSNumber *_key = nil;
+        __block NSNumber *_value = nil;
+        
+        // 获取key和value
+        [dic enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            _key = (NSNumber *)key;
+            _value = (NSNumber *)obj;
+        }];
+        
+        // x value
+        double height = self.bounds.size.height - BOTTOM_MARGIN_TO_LEAVE;
+        
+        double y = height - ((height / ([_yAxisRange doubleValue] + yIntervalValue)) * [_value doubleValue]);
+        
+        plot.points[idx].x = ceil(plot.points[idx].x);
+        plot.points[idx].y = ceil(y);
+
+    }];
+    
+    
+    NSUInteger count = _xAxisValues.count;
+    
+    CGPoint firstPoint = plot.points[0];
+    CGPoint lastPoint = plot.points[count-1];
+    
+    NSUInteger plottingValuesCount = plot.plottingValues.count;
+    
+    for (int i = 0; i < count; i++) {
+        
+        if (i > plottingValuesCount-1) {
+            lastPoint = plot.points[i-1];
+            break;
+        }
+        
+        CGPoint point = plot.points[i];
+        
+        if (i == 0) {
+            CGPathMoveToPoint(graphPath, NULL, point.x, point.y);
+            CGPathMoveToPoint(backgroundPath, NULL, point.x, point.y);
+        }
+        
+        // 画线段
+        CGPathAddLineToPoint(graphPath, NULL, point.x, point.y);
+        // 画背景
+        CGPathAddLineToPoint(backgroundPath, NULL, point.x, point.y);
+    }
+    
+    // 右边底部
+    CGPathAddLineToPoint(backgroundPath, NULL, lastPoint.x, self.bounds.size.height-BOTTOM_MARGIN_TO_LEAVE-1);
+    // 回到第一个点
+    CGPathAddLineToPoint(backgroundPath, NULL, firstPoint.x, self.bounds.size.height-BOTTOM_MARGIN_TO_LEAVE-1);
+    // 关闭path，形成封闭区域
+    CGPathCloseSubpath(backgroundPath);
+    
+    backgroundLayer.path = backgroundPath;
+    graphLayer.path = graphPath;
+    
+    // animation
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+    animation.delegate = self;
+    animation.duration = 0.5;
+    animation.fromValue = @(0.0);
+    animation.toValue = @(1.0);
+    [graphLayer addAnimation:animation forKey:@"strokeEnd"];
+    
+    
+    if (pad) {                  // 填充折线图背景
+        
+        [self.layer addSublayer:backgroundLayer];
+        
+        // 渐变
+        CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+        self.gradientLayer = gradientLayer;
+        
+        gradientLayer.frame = backgroundLayer.bounds;
+        //    gradientLayer.colors = @[[UIColor colorWithRed:0.251 green:0.232 blue:1.000 alpha:1.000],[UIColor colorWithRed:0.282 green:0.945 blue:1.000 alpha:1.000]];
+        gradientLayer.colors = @[(id)[[UIColor orangeColor] CGColor], (id)[[UIColor whiteColor] CGColor]];
+        // 起始点
+        gradientLayer.startPoint = CGPointMake(0, 0);
+        // 结束点
+        gradientLayer.endPoint   = CGPointMake(0, 1);
+        gradientLayer.mask = backgroundLayer;
+        //        [self.layer addSublayer:gradientLayer];
+        
+    }
+    
+    [self.layer addSublayer:graphLayer];
+    
+    
+    if (plot.showCircle) {
+        
+        NSUInteger plottingValuesCount = plot.plottingValues.count;
+        
+        for (int i = 0; i < count; i++) {
+            
+            if (i > plottingValuesCount-1) {
+                break;
+            }
+            
+            CGPoint point = plot.points[i];
+            
+//            double yValue = [[plot.plottingValues[i] objectForKey:@(i+1)] doubleValue];
+            
+            NSDictionary *pointDic = plot.plottingValues[i];
+            __block double yValue = 0;
+            
+            [pointDic enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                yValue = [(NSNumber *)obj doubleValue];
+            }];
+            
+            // 纵坐标y平均间隔值
+            double yIntervalValue = yRange / INTERVAL_COUNT;
+            int y = yValue / yIntervalValue;
+            
+            CGFloat dotsSize = [_themeAttributes[kDotSizeKey] floatValue];
+            
+            // 圆点
+            CAShapeLayer *circleLayer = [CAShapeLayer layer];
+            circleLayer.frame = CGRectMake(point.x-dotsSize/2.0, point.y-dotsSize/2.0, dotsSize, dotsSize);
+            circleLayer.fillColor = [UIColor whiteColor].CGColor;
+            circleLayer.backgroundColor = [UIColor clearColor].CGColor;
+            
+            if ([_plottingColors objectForKey:@(y+1)] != nil) {
+                circleLayer.strokeColor = ((UIColor *)[_plottingColors objectForKey:@(y+1)]).CGColor;
+            } else {        // 超过限度，颜色等于最后一个颜色
+                NSUInteger count = _plottingColors.count;
+                circleLayer.strokeColor = ((UIColor *)[_plottingColors objectForKey:@(count)]).CGColor;
+            }
+            
+            
+            circleLayer.lineWidth = ((NSNumber *)theme[kPlotStrokeWidthKey]).intValue;
+            
+            CGMutablePathRef circlePath = CGPathCreateMutable();
+            
+            // 画点
+            CGPathAddEllipseInRect(circlePath, NULL, CGRectMake(0, 0, dotsSize, dotsSize));
+            
+            circleLayer.path = circlePath;
+            [self.layer addSublayer:circleLayer];
+            
+            if (i == 0) {
+                self.firstCircleLayer = circleLayer;
+            }
+        }
+    }
+    
+    
+    NSUInteger count2 = _xAxisValues.count;
+    
+    for (int i = 0; i < count2; i++) {
+        CGPoint point = plot.points[i];
+        
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn.backgroundColor = [UIColor clearColor];
+        btn.tag = i;
+        btn.frame = CGRectMake(point.x-20, point.y-20, 40, 40);
+        [btn addTarget:self action:@selector(clicked:) forControlEvents:UIControlEventTouchUpInside];
+        
+        // 关联btn与plot
+        // 关联对象：btn，关联key：kAssociatedPlotObject，关联value：plot
+        objc_setAssociatedObject(btn, kAssociatedPlotObject, plot, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        
+        [self addSubview:btn];
+    }
+    
 }
 
 #pragma mark - UIButton event methods
