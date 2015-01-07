@@ -9,7 +9,7 @@
 #import "YYLineGraphView.h"
 #import <objc/runtime.h>
 #import "YYPlot.h"
-#import "PopoverView.h"
+//#import "PopoverView.h"
 
 @interface YYLineGraphView ()
 {
@@ -732,7 +732,7 @@
         point.y -= 15;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [PopoverView showPopoverAtPoint:point inView:self withContentView:lbl delegate:nil];
+//            [PopoverView showPopoverAtPoint:point inView:self withContentView:lbl delegate:nil];
         });
     }
     @catch (NSException *exception) {
