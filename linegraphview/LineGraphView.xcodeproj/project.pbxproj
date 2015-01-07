@@ -17,7 +17,6 @@
 		B8C422CC1A2EBE9500AD5D01 /* YYPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C422CB1A2EBE9500AD5D01 /* YYPlot.m */; };
 		B8C422CF1A2EBEA200AD5D01 /* YYLineGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C422CE1A2EBEA200AD5D01 /* YYLineGraphView.m */; };
 		B8C422D51A2EC33500AD5D01 /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C422D41A2EC33500AD5D01 /* PopoverView.m */; };
-		B8C4C6F51A314484000541B6 /* YYXAixsLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C4C6F41A314484000541B6 /* YYXAixsLabel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,8 +53,6 @@
 		B8C422D31A2EC33500AD5D01 /* PopoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverView.h; sourceTree = "<group>"; };
 		B8C422D41A2EC33500AD5D01 /* PopoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoverView.m; sourceTree = "<group>"; };
 		B8C422D61A2EC35600AD5D01 /* PopoverViewCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverViewCompatibility.h; sourceTree = "<group>"; };
-		B8C4C6F31A314484000541B6 /* YYXAixsLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYXAixsLabel.h; sourceTree = "<group>"; };
-		B8C4C6F41A314484000541B6 /* YYXAixsLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYXAixsLabel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,13 +98,11 @@
 				B8C422A91A2EBE7A00AD5D01 /* AppDelegate.m */,
 				B8C422AB1A2EBE7A00AD5D01 /* ViewController.h */,
 				B8C422AC1A2EBE7A00AD5D01 /* ViewController.m */,
+				B8C422CD1A2EBEA200AD5D01 /* YYLineGraphView.h */,
+				B8C422CE1A2EBEA200AD5D01 /* YYLineGraphView.m */,
 				B8C422CA1A2EBE9500AD5D01 /* YYPlot.h */,
 				B8C422CB1A2EBE9500AD5D01 /* YYPlot.m */,
 				B8C422D01A2EBEB700AD5D01 /* YYLineGraphViewConstants.h */,
-				B8C422CD1A2EBEA200AD5D01 /* YYLineGraphView.h */,
-				B8C422CE1A2EBEA200AD5D01 /* YYLineGraphView.m */,
-				B8C4C6F31A314484000541B6 /* YYXAixsLabel.h */,
-				B8C4C6F41A314484000541B6 /* YYXAixsLabel.m */,
 				B8C422D21A2EC33500AD5D01 /* PopoverView_Configuration.h */,
 				B8C422D61A2EC35600AD5D01 /* PopoverViewCompatibility.h */,
 				B8C422D31A2EC33500AD5D01 /* PopoverView.h */,
@@ -247,7 +242,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B8C4C6F51A314484000541B6 /* YYXAixsLabel.m in Sources */,
 				B8C422CC1A2EBE9500AD5D01 /* YYPlot.m in Sources */,
 				B8C422CF1A2EBEA200AD5D01 /* YYLineGraphView.m in Sources */,
 				B8C422AD1A2EBE7A00AD5D01 /* ViewController.m in Sources */,
