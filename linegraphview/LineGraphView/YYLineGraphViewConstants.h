@@ -36,6 +36,7 @@
 #define kPlotPointFillColorKey @"kPlotPointFillColorKey"
 // 折线圆点大小
 #define kPlotDotSizeKey @"kPlotDotSizeKey"
+#define kPlotDotWidthKey @"kPlotDotWidthKey"
 
 // 背景线的颜色
 #define kPlotBackgroundLineColorKey @"kPlotBackgroundLineColorKey"

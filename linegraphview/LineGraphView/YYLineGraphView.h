@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "YYPlot.h"
 
 typedef enum {
     GraphViewTypeBloodPressure,
@@ -20,8 +21,6 @@ typedef enum {
     TimeDimensionTypeThreeMonth
 } TimeDimensionType;
 
-
-@class YYPlot;
 
 @interface YYLineGraphView : UIView
 

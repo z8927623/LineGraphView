@@ -11,6 +11,9 @@
 #import "YYPlot.h"
 //#import "PopoverView.h"
 
+#define UIColorFromHexWithAlpha(hexValue, a) [UIColor colorWithRed:((float)((hexValue & 0xFF0000) >> 16))/255.0 green:((float)((hexValue & 0xFF00) >> 8))/255.0 blue:((float)(hexValue & 0xFF))/255.0 alpha:a]
+#define kColorPlotFillingColor UIColorFromHexWithAlpha(0x33AC60, 0.6)
+
 @interface YYLineGraphView ()
 {
     float _leftMarginToLeave;
@@ -77,16 +80,12 @@
     _themeAttributes = @{
                          kXAxisLabelColorKey : [UIColor colorWithRed:113.0/255.0 green:173.0/255.0 blue:112.0/255.0 alpha:1.0],
                          kXAxisLabelFontKey : [UIFont fontWithName:@"TrebuchetMS" size:12],
-                         
                          kYAxisLabelColorKey : [UIColor blackColor],
                          kYAxisLabelFontKey : [UIFont fontWithName:@"TrebuchetMS" size:13],
-                         kPlotBackgroundLineColorKey : [UIColor colorWithRed:181.0/255.0 green:227.0/255.0 blue:197.0/255.0 alpha:0.5],    // 背景线的颜色
+                         kPlotBackgroundLineColorKey : [UIColor colorWithRed:181.0/255.0 green:227.0/255.0 blue:197.0/255.0 alpha:0.5],               // 背景线的颜色
                          kYAxisLabelSideMarginsKey : @8,     // y轴两边距离
-                         
-                         kPlotDotSizeKey : @5,               // 折线圆点大小
                          kYAxisLargeDotSizeKey : @5.0,       // y轴大点大小
                          kYAxisLittleDotSizeKey : @3.0       // y轴小点大小
-                         
                          };
 }
 
@@ -615,7 +614,8 @@
         
         gradientLayer.frame = backgroundLayer.bounds;
         //    gradientLayer.colors = @[[UIColor colorWithRed:0.251 green:0.232 blue:1.000 alpha:1.000],[UIColor colorWithRed:0.282 green:0.945 blue:1.000 alpha:1.000]];
-        gradientLayer.colors = @[(id)[[UIColor orangeColor] CGColor], (id)[[UIColor whiteColor] CGColor]];
+        
+        gradientLayer.colors = @[(id)[kColorPlotFillingColor CGColor], (id)[[UIColor whiteColor] CGColor]];
         // 起始点
         gradientLayer.startPoint = CGPointMake(0, 0);
         // 结束点
@@ -653,7 +653,8 @@
             double yIntervalValue = yRange / YPARTITION_COUNT;
             int y = yValue / yIntervalValue;
             
-            CGFloat dotsSize = [_themeAttributes[kPlotDotSizeKey] floatValue];
+            CGFloat dotsSize = [theme[kPlotDotSizeKey] floatValue];
+            CGFloat dotsWidth = [theme[kPlotDotWidthKey] floatValue];
             
             // 圆点
             CAShapeLayer *circleLayer = [CAShapeLayer layer];
@@ -668,8 +669,7 @@
                 circleLayer.strokeColor = ((UIColor *)[_plottingColors objectForKey:@(count)]).CGColor;
             }
             
-            
-            circleLayer.lineWidth = ((NSNumber *)theme[kPlotStrokeWidthKey]).intValue;
+            circleLayer.lineWidth = dotsWidth;
             
             CGMutablePathRef circlePath = CGPathCreateMutable();
             
