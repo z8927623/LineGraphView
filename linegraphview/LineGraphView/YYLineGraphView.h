@@ -44,7 +44,7 @@ typedef enum {
 // y坐标后缀, 多用于单位
 @property (nonatomic, strong) NSString *yAxisSuffix;
 
-// 折线图模型数组，多个plot就代表多个折线
+// 折线图模型数组, 多个plot就代表多个折线
 @property (nonatomic, readonly, strong) NSMutableArray *plots;
 
 // 主题字典

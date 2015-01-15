@@ -9,7 +9,6 @@
 #import "YYLineGraphView.h"
 #import <objc/runtime.h>
 #import "YYPlot.h"
-//#import "PopoverView.h"
 
 #define UIColorFromHexWithAlpha(hexValue, a) [UIColor colorWithRed:((float)((hexValue & 0xFF0000) >> 16))/255.0 green:((float)((hexValue & 0xFF00) >> 8))/255.0 blue:((float)(hexValue & 0xFF))/255.0 alpha:a]
 #define kColorPlotFillingColor UIColorFromHexWithAlpha(0x33AC60, 0.6)
@@ -732,7 +731,7 @@
         point.y -= 15;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-//            [PopoverView showPopoverAtPoint:point inView:self withContentView:lbl delegate:nil];
+
         });
     }
     @catch (NSException *exception) {
