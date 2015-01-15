@@ -21,7 +21,6 @@ typedef enum {
     TimeDimensionTypeThreeMonth
 } TimeDimensionType;
 
-
 @interface YYLineGraphView : UIView
 
 // x坐标数据
@@ -42,7 +41,7 @@ typedef enum {
 // y坐标大小范围
 @property (nonatomic, strong) NSNumber *yAxisRange;
 
-// y坐标后缀，多用于单位
+// y坐标后缀, 多用于单位
 @property (nonatomic, strong) NSString *yAxisSuffix;
 
 // 折线图模型数组，多个plot就代表多个折线
